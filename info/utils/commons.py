@@ -16,8 +16,9 @@ class RegeConverter(BaseConverter):
 
 
 #登录验证装饰器
+
 def required_login(f):
-    functools.wraps(f)
+    @functools.wraps(f)
     def wrapper(*args,**kwargs):
         user_id = session.get('user_id')
         user = None
@@ -27,5 +28,5 @@ def required_login(f):
             except Exception as e:
                 current_app.logger.error(e)
         g.user = user
-        return f(*args,*kwargs)
+        return f(*args,**kwargs)
     return wrapper

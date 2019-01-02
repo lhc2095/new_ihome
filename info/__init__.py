@@ -41,7 +41,7 @@ def create_app(config_name):
 
 
     #开启csrf保护
-    CSRFProtect(app)
+    # CSRFProtect(app)
 
     #生成csrf_token,并且把token写入客户端浏览器的cookie中
     #在每次请求后，生成csrf_token，并且把token写入客户端的浏览器的cookie中
