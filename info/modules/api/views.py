@@ -1,4 +1,4 @@
-from . import  passport_blue
+from . import  api
 from flask import  request,jsonify,current_app,make_response
 from info import redis_store,constants
 from info.utils.captcha.captcha import  captcha
@@ -6,14 +6,14 @@ from info.utils.response_code import RET
 
 
 # 进入注册页面
-@passport_blue.route('/register')
+@api.route('/register')
 def register():
     from manage import app
     return app.send_static_file('register.html')
 
 
 #生成验证码
-@passport_blue.route('/api/v1.0/imagecode')
+@api.route('/api/v1.0/imagecode')
 def image_code():
     image_code_id=request.args.get('cur')
     if not image_code_id:

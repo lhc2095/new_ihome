@@ -54,10 +54,14 @@ def create_app(config_name):
         # 返回响应
         return response
 
-    from info.modules.index import index_blue  # 导入主页蓝图
-    from info.modules.passport import passport_blue  # 导入注册登录蓝图
+    from info.modules.index.views import index_blue  # 导入主页蓝图
+    from info.modules.api import api  # 导入注册登录蓝图
 
-    app.register_blueprint(index_blue,url_prefix='/api/v1.0')  # 注册主页蓝图
-    app.register_blueprint(passport_blue)  # 注册注册登录蓝图
+    app.register_blueprint(index_blue)  # 注册主页蓝图
+    #添加自定义转换器
+    from info.utils.commons import RegexConverter
+    app.template_filter['rege'] = RegexConverter
+
+    app.register_blueprint(api,url_prefix='/api/v1.0')  # 注册注册登录蓝图
 
     return app
