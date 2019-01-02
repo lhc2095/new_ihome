@@ -4,6 +4,7 @@ from flask_sqlalchemy import  SQLAlchemy
 from config import config_dict,Config
 from logging.handlers import RotatingFileHandler
 import logging
+from info.utils.commons import RegexConverter
 
 # 设置日志的记录等级
 logging.basicConfig(level=logging.DEBUG) # 调试debug级
@@ -56,11 +57,10 @@ def create_app(config_name):
 
     from info.modules.index.views import index_blue  # 导入主页蓝图
     from info.modules.api import api  # 导入注册登录蓝图
-
+    # 添加自定义转换器
+    app.url_map.converters['re'] = RegexConverter
     app.register_blueprint(index_blue)  # 注册主页蓝图
-    #添加自定义转换器
-    from info.utils.commons import RegexConverter
-    app.url_map.converters['rege'] = RegexConverter
+
 
     app.register_blueprint(api,url_prefix='/api/v1.0')  # 注册注册登录蓝图
 
