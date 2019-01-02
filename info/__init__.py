@@ -60,7 +60,7 @@ def create_app(config_name):
     app.register_blueprint(index_blue)  # 注册主页蓝图
     #添加自定义转换器
     from info.utils.commons import RegexConverter
-    app.template_filter['rege'] = RegexConverter
+    app.url_map.converters['rege'] = RegexConverter
 
     app.register_blueprint(api,url_prefix='/api/v1.0')  # 注册注册登录蓝图
 
