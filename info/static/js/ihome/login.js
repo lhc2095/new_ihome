@@ -41,7 +41,7 @@ $(document).ready(function() {
             contentType: "application/json",
             success: function (resp) {
                 if (resp.errno == "0") {
-                    location.href = "/index.html"
+                    window.location.href = "/"
                 }else {
                     $("#password-err span").html(resp.errmsg)
                     $("#password-err").show()

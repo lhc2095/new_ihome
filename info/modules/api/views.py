@@ -1,32 +1,48 @@
-from . import  api
-from flask import  request,jsonify,current_app,make_response
-from info import redis_store,constants
+
+from info.models import House
+from info.utils.commons import required_login
+from . import api
+from flask import request, jsonify, current_app, make_response, session, g
+from info import redis_store, constants
 from info.utils.captcha.captcha import  captcha
 from info.utils.response_code import RET
 
 
-# 进入注册页面
-@api.route('/register')
-def register():
-    from manage import app
-    return app.send_static_file('register.html')
-
-
-#生成验证码
-@api.route('/api/v1.0/imagecode')
-def image_code():
-    image_code_id=request.args.get('cur')
-    if not image_code_id:
-        return jsonify(errno=RET.NODATA,errmsg='参数缺失')
-    name,text,image=captcha.generate_captcha()
+@api.route('/houses/index')
+@required_login
+def house():
+    """
+    1.获取参数,数据库图片
+    2.返回数据
+    :return:
+    """
     try:
-        redis_store.setex('ImageCode_'+image_code_id,constants.IMAGE_CODE_REDIS_EXPIRES,text)
+        houses = House.query.order_by(House.order_count.desc()).limit(constants.CLICK_RANK_MAX_NEWS)
     except Exception as e:
         current_app.logger.errno(e)
-        return jsonify(errno=RET.DBERR,errmsg='保存数据失败')
-    response=make_response(image)
-    response.headers['Content-Type']='image/jpg'
-    return response
+        return jsonify(errno=RET.DBERR,errmsg='数据库查询错误')
+    if not houses :
+        return jsonify(errno=RET.NODATA,errmsg='数据库没有数据')
+    houses = []
+    for i in houses:
+        house.append(i.to_basic_dict())
+    data = {
+        'houses':houses
+    }
+
+    return jsonify(errno=RET.OK,errmsg='OK',data=data)
 
 
-# a
+
+
+
+
+
+
+
+
+
+
+
+
+
