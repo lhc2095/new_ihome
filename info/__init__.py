@@ -41,7 +41,7 @@ def create_app(config_name):
 
 
     #开启csrf保护
-    CSRFProtect(app)
+    # CSRFProtect(app)
 
     #生成csrf_token,并且把token写入客户端浏览器的cookie中
     #在每次请求后，生成csrf_token，并且把token写入客户端的浏览器的cookie中
@@ -53,9 +53,14 @@ def create_app(config_name):
         response.set_cookie('csrf_token', csrf_token)
         # 返回响应
         return response
+    #添加自定义转换器
+    from info.utils.commons import RegeConverter
+    app.url_map.converters['rege'] = RegeConverter
 
     from info.modules.index import index_blue  # 导入主页蓝图
     from info.modules.api import api  # 导入注册登录蓝图
+
+
 
     app.register_blueprint(index_blue)  # 注册主页蓝图
     app.register_blueprint(api,url_prefix='/api/v1.0')  # 注册注册登录蓝图
